@@ -1,6 +1,7 @@
 <?php
   //url array
-  $requestURI = explode('/', $_SERVER['REQUEST_URI']);
+  //$requestURI = explode('/', $_SERVER['REQUEST_URI']);
+  $url = $_GET['url'];
   $errors = 0;
   
   define('DS', DIRECTORY_SEPARATOR);
@@ -30,7 +31,7 @@
     $errors = 1;
   }
 
-  
+  /*
   // if there are no error loading the app configuration
   if ( $errors == 0 ) {
     // loading controller
@@ -54,5 +55,5 @@
       $errors = 1;
     }
   }
-  
+  */
 ?>
