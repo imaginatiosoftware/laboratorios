@@ -20,10 +20,10 @@
 
   //load the routing engine passing the user request
   try{
-    if (!file_exists(ROOT . DS . 'config' . DS . 'routes.php')){
-      throw new Exception("Routes file missing. <br />");
+    if (!file_exists(ROOT . DS . 'config' . DS . 'router.php')){
+      throw new Exception("Router engine missing. <br />");
     } else {
-      require_once (ROOT . DS . 'config' . DS . 'routes.php');
+      require_once (ROOT . DS . 'config' . DS . 'router.php');
     }
   } catch(Exception $ex){
     echo $ex->getMessage();
