@@ -2,11 +2,11 @@
   $requestURI = explode('/', $_SERVER['REQUEST_URI']);
   
   try{
-    if (!file_exists("controllers/". $requestURI[2] ."_controller.php")){
+    if (!file_exists("./app/controllers/". $requestURI[2] ."_controller.php")){
       throw new Exception("Routing Error.");
     }
     else{
-      require_once "controllers/". $requestURI[2] ."_controller.php";
+      require_once "./app/controllers/". $requestURI[2] ."_controller.php";
       if(!function_exists ($requestURI[3])){
         throw new Exception("Routing Error.");
       }else{
