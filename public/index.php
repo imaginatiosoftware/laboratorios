@@ -1,26 +1,58 @@
 <?php
+  //url array
   $requestURI = explode('/', $_SERVER['REQUEST_URI']);
-  $file_path = $_SERVER['DOCUMENT_ROOT']. "/laboratorios/app/controllers/". $requestURI[2] ."_controller.php";
-  echo($_SERVER['DOCUMENT_ROOT']);
-  echo("<br/>");
-  echo($_SERVER['SCRIPT_FILENAME']);
-  echo("<br/>");
-  echo($file_path);
-  echo("<br/>");
+  $errors = 0;
+  
+  define('DS', DIRECTORY_SEPARATOR);
+  define('ROOT', dirname(dirname(__FILE__)));
+  
+  //loading app configuration
   try{
-    if (!file_exists($file_path)){
-      throw new Exception("Routing Error.");
+    if (!file_exists(ROOT . DS . 'config' . DS . 'config.php')){
+      throw new Exception("Configuration file missing. <br />");
+    } else {
+      require_once (ROOT . DS . 'config' . DS . 'config.php');
     }
-    else{
-      require_once  $file_path;
-      if(!function_exists ($requestURI[3])){
-        throw new Exception("Routing Error.");
-      }else{
-        call_user_func($requestURI[3]);
-      }
-    }
-  }catch(Exception $ex){
-    echo $requestURI[2] ." missmatched.<br/>";
+  } catch(Exception $ex){
     echo $ex->getMessage();
+    $errors = 1;
   }
+
+  //load the routing engine passing the user request
+  try{
+    if (!file_exists(ROOT . DS . 'config' . DS . 'routes.php')){
+      throw new Exception("Routes file missing. <br />");
+    } else {
+      require_once (ROOT . DS . 'config' . DS . 'routes.php');
+    }
+  } catch(Exception $ex){
+    echo $ex->getMessage();
+    $errors = 1;
+  }
+
+  
+  // if there are no error loading the app configuration
+  if ( $errors == 0 ) {
+    // loading controller
+    $file_path = ROOT . DS . "app/controllers/". $requestURI[2] ."_controller.php";
+
+    try{
+      if (!file_exists($file_path)){
+        throw new Exception("Routing Error.");
+      }
+      else{
+        require_once  $file_path;
+        if(!function_exists ($requestURI[3])){
+          throw new Exception("Routing Error.");
+        }else{
+          call_user_func($requestURI[3]);
+        }
+      }
+    }catch(Exception $ex){
+      echo $requestURI[2] ." missmatched.<br/>";
+      echo $ex->getMessage();
+      $errors = 1;
+    }
+  }
+  
 ?>
