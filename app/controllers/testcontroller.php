@@ -1,5 +1,7 @@
 <?php 
-  class TestController {
+  require_once ROOT . DS . 'app' . DS . 'base/controller.class.php';
+
+  class TestController extends Controller{
     function sumar ( $v ) {
       $value = 0;
       $values_str = join( ", ", $v );
@@ -8,8 +10,11 @@
         $value += intval($v[$i]);
       }
 
-      echo "El resultado de sumar $values_str es: $value<br/>";
-      echo "<a href=\"/laboratorios/test/sumar/9/8\">Sumar 9+8</a>";
+      $this->_template->set( "suma", $value );
+      $this->_template->set( "sumandos", $value );
+
+      //echo "El resultado de sumar $values_str es: $value<br/>";
+      //echo "<a href=\"/laboratorios/test/sumar/9/8\">Sumar 9+8</a>";
     }
   }
 ?>

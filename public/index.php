@@ -3,10 +3,10 @@
   //$requestURI = explode('/', $_SERVER['REQUEST_URI']);
   $url = $_GET['url'];
   $errors = 0;
-  
+
   define('DS', DIRECTORY_SEPARATOR);
   define('ROOT', dirname(dirname(__FILE__)));
-  
+
   //loading app configuration
   try{
     if (!file_exists(ROOT . DS . 'config' . DS . 'config.php')){
