@@ -1,16 +1,15 @@
 <?php 
   class TestController {
-    function sumar($v)
-    {
+    function sumar ( $v ) {
       $value = 0;
-      for($i = 3;$i < count($v); $i++){
-        echo($v);
-        //$value = $value + intval($requestURI[$i]);
+      $values_str = join( ", ", $v );
+
+      for($i = 0;$i < count($v); $i++){
+        $value += intval($v[$i]);
       }
-    //echo(var_dump(explode('/', $login_path)));
-    //echo(var_dump($requestURI));
-    echo("El resultado de sumar es: ");
-    //echo($value);
+
+      echo "El resultado de sumar $values_str es: $value<br/>";
+      echo "<a href=\"/laboratorios/test/sumar/9/8\">Sumar 9+8</a>";
     }
   }
 ?>

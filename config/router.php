@@ -61,22 +61,22 @@
     global $url;
 
     $urlArray = array();
-    $urlArray = explode("/",$url);
+    $urlArray = explode( "/", $url );
 
     $controller = $urlArray[0];
-    array_shift($urlArray);
+    array_shift( $urlArray );
     $action = $urlArray[0];
-    array_shift($urlArray);
+    array_shift( $urlArray );
     $queryString = $urlArray;
 
     $controllerName = $controller;
     $controller = ucwords($controller);
     $model = rtrim($controller, 's');
     $controller .= 'Controller';
-    $dispatch = new $controller($model,$controllerName,$action);
+    $dispatch = new $controller( $model, $controllerName, $action );
 
     if ((int)method_exists($controller, $action)) {
-      call_user_func_array(array($dispatch,$action),$queryString);
+      call_user_func_array( array($dispatch, $action), array($queryString) );
     } else {
       /* Error Generation Code Here */
     }
