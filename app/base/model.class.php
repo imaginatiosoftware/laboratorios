@@ -6,7 +6,8 @@
     function __construct () {
       $this->connect( DB_HOST, DB_USER, DB_PASSWORD, DB_NAME );
       $this->_model = get_class( $this );
-      $this->_table = strlower( $this->_model )."s";
+      $this->_table = strtolower( $this->_model ) . "s";
+      echo "$this->_table";
     }
 
     function __destruct() {

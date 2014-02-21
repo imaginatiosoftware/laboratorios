@@ -73,6 +73,7 @@
     $controller = ucwords( $controller );
     $model = rtrim( $controller, 's' );
     $controller .= 'Controller';
+
     $dispatch = new $controller( $model, $controllerName, $action );
 
     if ( method_exists( $controller, $action ) ) {
@@ -87,10 +88,13 @@
     if (file_exists(ROOT . DS . 'library' . DS . strtolower($className) . '.class.php')) {
       require_once(ROOT . DS . 'library' . DS . strtolower($className) . '.class.php');
 
+    } else if (file_exists(ROOT . DS . 'app' . DS . 'base' . DS . strtolower($className) . '.class.php')) {
+      require_once(ROOT . DS . 'app' . DS . 'base' . DS . strtolower($className) . '.class.php');
+
     } else if (file_exists(ROOT . DS . 'app' . DS . 'controllers' . DS . strtolower($className) . '.php')) {
       require_once(ROOT . DS . 'app' . DS . 'controllers' . DS . strtolower($className) . '.php');
 
-    } else if (file_exists(ROOT . DS . 'app' . DS . 'models' . DS . strtolower($className) . '_controller.php')) {
+    } else if (file_exists(ROOT . DS . 'app' . DS . 'models' . DS . strtolower($className) . '.php')) {
       require_once(ROOT . DS . 'app' . DS . 'models' . DS . strtolower($className) . '.php');
 
     } else {

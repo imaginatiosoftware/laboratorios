@@ -1,7 +1,6 @@
 <?php
-  //require_once '';
+  require_once ROOT . DS . 'app/base/model.class.php';
 
-  class test extends Model {
-    
+  class Test extends Model {
   }
 ?>

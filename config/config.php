@@ -3,8 +3,9 @@
 
   define( 'DEVELOPMENT_ENVIRONMENT', true );
 
-  define( 'DB_NAME', 'NombreBD' );
-  define( 'DB_USER', 'UsuarioBD' );
-  define( 'DB_PASSWORD', 'ContraseñaBD' );
-  define( 'DB_HOST', 'HostBD' );
+  define( 'DB_NAME', 'laboratorios_test' );
+  define( 'DB_USER', 'imaginatio' );
+  define( 'DB_PASSWORD', 'imaginatio' );
+  define( 'DB_HOST', '127.0.0.1' );
+  define( 'DB_PORT', '3306' );
 ?>

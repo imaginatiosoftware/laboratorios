@@ -30,6 +30,7 @@
     echo $ex->getMessage();
     $errors = 1;
   }
+  
 
   /*
   // if there are no error loading the app configuration

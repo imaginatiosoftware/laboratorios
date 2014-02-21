@@ -16,18 +16,18 @@
     function render() {
       extract( $this->variables );
 
-      if ( file_exists( ROOT . DS . APPLICATION . DS . 'views' . DS . $this->_controller . DS . 'header.php' ) ) {
-        include_once ROOT . DS . APPLICATION . DS . 'views' . DS . $this->_controller . DS . 'header.php';
+      if ( file_exists( ROOT . DS . 'app' . DS . 'views' . DS . $this->_controller . DS . 'header.php' ) ) {
+        include_once ROOT . DS . 'app' . DS . 'views' . DS . $this->_controller . DS . 'header.php';
       } else {
-        include_once ROOT . DS . APPLICATION . DS . 'views' . DS . 'header.php';
+        include_once ROOT . DS . 'app' . DS . 'views' . DS . 'header.php';
       }
 
-      include_once ROOT . DS . APPLICATION . DS . 'views' . DS . $this->_controller . DS . $this->_action . '.php';
+      include_once ROOT . DS . 'app' . DS . 'views' . DS . $this->_controller . DS . $this->_action . '.php';
 
-      if ( file_exists( ROOT . DS . APPLICATION . DS . 'views' . DS . $this->_controller . DS . 'footer.php' ) ) {
-        include_once ROOT . DS . APPLICATION . DS . 'views' . DS . $this->_controller . DS . 'footer.php';
+      if ( file_exists( ROOT . DS . 'app' . DS . 'views' . DS . $this->_controller . DS . 'footer.php' ) ) {
+        include_once ROOT . DS . 'app' . DS . 'views' . DS . $this->_controller . DS . 'footer.php';
       } else {
-        include_once ROOT . DS . APPLICATION . DS . 'views' . DS . 'footer.php';
+        include_once ROOT . DS . 'app' . DS . 'views' . DS . 'footer.php';
       }
     }
   }
