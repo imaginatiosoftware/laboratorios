@@ -2,11 +2,11 @@
   class SQLQuery {
     protected $_dbHandle;
     protected $_result;
+    protected $_table;
+    protected $_model;
 
     /** Connects to database **/
     function connect( $address, $account, $pwd, $name ) {
-      //echo "Conectando<br/>";
-      //echo "\$this->_dbHandle = new PDO('mysql:host=$address;dbname=$name', $account, $pwd)<br/>";
       //abro conexión con la base de datos por medio de PDO
       //manejar error mediante excepciones
       $this->_dbHandle = new PDO( "mysql:host=$address;dbname=$name",
@@ -14,36 +14,42 @@
     }
 
     /** Disconnects from database **/
+    //PDO es atajado por garbage collector
     function disconnect() {
-      if ( @
-
-      mysql_close( $this->_dbHandle ) != 0 ) {
+      /*if ( @mysql_close( $this->_dbHandle ) != 0 ) {
         return 1;
       } else {
         return 0;
-      }
+      }*/
     }
 
     function selectAll() {
       $query = 'select * from `'.$this->_table.'`';
       return $this->query( $query );
+      $query = "select * from $this->_table";
+      $prepared_query = $this->_dbHandle->prepare( $query );
+      $prepared_query->execute();
+
+      $result = $prepared_query->fetchAll( PDO::FETCH_ASSOC );
+      $prepared_query->closeCursor();
+
+      return $result;
     }
 
     function select( $id ) {
-      //$this->_dbHandle->beginTransacti//on();
-      //$query = 'select where id = :idhi
-      $query = 'select * from :table';s->_table . '` where `id` = \'' . $id . '\'';
-      $query = 'select * from :table where id = :id';
-      $prepared_q//uery = $this->_dbHandle->prepare( $query );
-      echo "$prepared_query->
-      $prepared_query->execute(array( 'table' => $this->_table ));queryString<br/>";
+      $query = "select * from $this->_table where id = :id";
+      $prepared_query = $this->_dbHandle->prepare( $query );
+      $prepared_query->execute(array( "id" => $id ));
 
-      $prepared_
-      $result = $prepared_query->fetchAll( PDO::FETCH_ASSOC );
+      $result = $prepared_query->fetch( PDO::FETCH_ASSOC );
+      $result_model = new $this->_model;
+
+      foreach ( $result as $attribute_key => $attribute_value ) {
+        $result_model->$attribute_key = $attribute_value;
+      }
+
       $prepared_query->closeCursor();
-query->execute$result;));
-      //$this->_dbHandle->commit();
-      return $prepared_query->fetchAll(); PDO::FETCH_ASSOC 
+      return $result_model; 
     }
 
     /** Custom SQL Query **/
