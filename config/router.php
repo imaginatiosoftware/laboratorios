@@ -58,28 +58,27 @@
   function callHook() {
     global $url;
 
-    process_path( $url );
+    $result = process_path( $url );
+    if ($result == null){
+      echo "No route matches";
+    }
+    else{
+      $controller = $result["controller"];
+      $action = $result["action"];
+      $params = $result["variables"];
 
-    $urlArray = array();
-    $urlArray = explode( "/", $url );
+      $controllerName = $controller;
+      $controller = ucwords( $controller );
+      $model = rtrim( $controller, 's' );
+      $controller .= 'Controller';
 
-    $controller = $urlArray[0];
-    array_shift( $urlArray );
-    $action = $urlArray[0];
-    array_shift( $urlArray );
-    $queryString = $urlArray;
+      $dispatch = new $controller( $model, $controllerName, $action );
 
-    $controllerName = $controller;
-    $controller = ucwords( $controller );
-    $model = rtrim( $controller, 's' );
-    $controller .= 'Controller';
-
-    $dispatch = new $controller( $model, $controllerName, $action );
-
-    if ( method_exists( $controller, $action ) ) {
-      call_user_func_array( array($dispatch, $action), array($queryString) );
-    } else {
-      throw new Exception( "No se encontró el método $action", 2 );
+      if ( method_exists( $controller, $action ) ) {
+        call_user_func( array($dispatch, $action), $params );
+      } else {
+        throw new Exception( "No se encontró el método $action", 2 );
+      }
     }
   }
 
@@ -107,3 +106,4 @@
   unregisterGlobals();
   callHook();
 ?>
+
