@@ -51,7 +51,7 @@
       $prepared_query->closeCursor();
       return $result_model; 
     }
-    
+
     function select_where( $key , $val ) {
       $query = "select * from $this->_table where $key = :val";
       $prepared_query = $this->_dbHandle->prepare( $query );
@@ -59,27 +59,28 @@
       
       $result = $prepared_query->fetch( PDO::FETCH_ASSOC );
       $result_model = new $this->_model;
-      if(is_array($result)){
+
+      if( is_array( $result ) ){
         foreach ( $result as $attribute_key => $attribute_value ) {
           $result_model->$attribute_key = $attribute_value;
         }
       }
+
       $prepared_query->closeCursor();
       return $result_model;
     }
-    
+
     function select_where_all( $key , $val ) {
       $query = "select * from $this->_table where $key = :val";
       $prepared_query = $this->_dbHandle->prepare( $query );
       $prepared_query->execute(array( "val" => $val ));
-    
+
       $result_model = $prepared_query->fetchAll(PDO::FETCH_CLASS, $this->_model);
-      
+
       $prepared_query->closeCursor();
       return $result_model;
     }
-    
-    
+
     /** Custom SQL Query **/
     function query( $query, $singleResult = 0 ) {
       $this->_result = mysql_query( $query, $this->_dbHandle );
@@ -106,6 +107,7 @@
             mysql_free_result( $this->_result );
             return $tempResults;
           }
+
           array_push( $result, $tempResults );
         }
 
@@ -129,3 +131,4 @@
       return mysql_error( $this->_dbHandle );
     }
   }
+?>

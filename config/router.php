@@ -58,11 +58,17 @@
   function callHook() {
     global $url;
 
-    $result = process_path( $url );
+    $result = process_path( $url ); 
+
     if ($result == null){
       echo "No route matches";
-    }
-    else{
+    } else {
+      require_once(ROOT . DS . 'app' . DS . 'base' . DS . 'db_classes.class.php');
+
+      $classes_from_database = new DBClasses();
+      $classes_from_database->connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+      $classes_from_database->import_all_db_classes();
+
       $controller = $result["controller"];
       $action = $result["action"];
       $params = $result["variables"];
