@@ -28,10 +28,9 @@
       $result = $prepared_query->fetchAll( PDO::FETCH_ASSOC );
       
       if(is_array($result)){
-        foreach ( $result as $each_class ) {
-          echo "entra";
-          eval($each_class["code"]);
-        }
+        return $result;
+      }else{
+        return null;
       }
     }
   }

@@ -1,8 +1,10 @@
-route: test/sumar/:sumandoA/:sumandoB, controller: test,  action: sumar
-route: cosovo/show/:id,                controller: test,  action: show
-route: test/list,                      controller: test,  action: tests
-route: test/new,                       controller: test,  action: create
-route: test/save,                      controller: test,  action: save, method: post
+route: test/sumar/:sumandoA/:sumandoB, controller: test, action: sumar
+route: cosovo/show/:id,                controller: test, action: show
+route: test/list,                      controller: test, action: tests
+route: test/new,                       controller: test, action: create
+route: test/save,                      controller: test, action: save
 
-route: coso/list,                      controller: coso,  action: cosos
-route: coso/redirect,                  controller: coso, action: redirect, method: get
+route: coso/list,                      controller: coso, action: cosos
+route: coso/redirect,                  controller: coso, action: redirect
+route: ,                               controller: sync, action: get_all_db_classes
+route: get_classes.json,               controller: sync, action: get_all_db_classes

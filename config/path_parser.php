@@ -8,8 +8,7 @@
 
   foreach ( $raw_paths as $raw_path ) {
     $processed_path = explode( ",",
-      //str_replace( array( " ", "controller:", "action:", "\"" ), "", $raw_path )
-      $raw_path
+      str_replace( array( " ", "controller:", "action:", "\"" ), "", $raw_path )
     );
 
     array_walk( $processed_path, 'trim_value' );

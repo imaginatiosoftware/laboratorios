@@ -3,7 +3,7 @@
     require_once 'path_parser.php';
     $result = null;
 
-    if( $url ){
+    //if( $url ){
       $splited_request = explode( "/", $url );
 
       foreach($paths as $path){
@@ -42,7 +42,6 @@
             $result["controller"] = $path[1];
             $result["action"] = $path[2];
             $result["variables"] = $variables;
-
             //foreach ( $variables as $key => $value ) {
             //  echo $key. " = " .$value;
             //  echo "</br>";
@@ -50,9 +49,9 @@
           }
         }
       }
-    } else {
-      echo "ROOT_PATH";
-    }
+    //} else {
+     // echo "ROOT_PATH";
+    //}
 
     return $result;
   }

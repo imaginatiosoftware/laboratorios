@@ -1,5 +1,5 @@
 <?php
-  //load the routes file to match the user request
+  /**  Load the routes file to match the user request  */
   try{
     if (!file_exists(ROOT . DS . 'config' . DS . 'routes.php')){
       throw new Exception("Routes file missing. <br />");
@@ -67,8 +67,10 @@
 
       $classes_from_database = new DBClasses();
       $classes_from_database->connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-      $classes_from_database->import_all_db_classes();
-
+      $classes_from_db = $classes_from_database->import_all_db_classes();
+      foreach ( $classes_from_db as $each_class ) {
+        eval($each_class["code"]);
+      }
       $controller = $result["controller"];
       $action = $result["action"];
       $params = $result["variables"];

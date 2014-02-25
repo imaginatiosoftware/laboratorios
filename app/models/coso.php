@@ -1,4 +1,4 @@
 <?php 
-  class Coso {
+  class Coso extends Model {
   }
 ?>

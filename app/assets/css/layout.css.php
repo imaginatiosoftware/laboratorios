@@ -1,7 +1,5 @@
-<html>
-<head>
-<title><?php echo $title?></title>
-<style>
+<?php 
+
 .item {
     width:400px;
 }
@@ -45,7 +43,5 @@ h2 {
     line-height:1em;
     font-family:helvetica,arial,sans-serif;
 }
-</style>
-</head>
-<body>
-<h1>Imaginatio's MVC. Default HEADER</h1>
+
+?>
