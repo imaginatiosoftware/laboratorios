@@ -3,8 +3,12 @@ route: cosovo/show/:id,                controller: test, action: show
 route: test/list,                      controller: test, action: tests
 route: test/new,                       controller: test, action: create
 route: test/save,                      controller: test, action: save
+route: test/check_json,                controller: test, action: check_json
 
-route: coso/list,                      controller: coso, action: cosos
+
+route: coso/list,                      controller: coso, action: cosos, method: get
 route: coso/redirect,                  controller: coso, action: redirect
 route: ,                               controller: sync, action: get_all_db_classes
 route: get_classes.json,               controller: sync, action: get_all_db_classes
+route: sync/new_db_class,              controller: sync, action: new_db_class, method: post
+route: coso/list,                      controller: coso, action: cosos_post, method: post

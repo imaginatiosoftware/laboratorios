@@ -33,6 +33,11 @@
         return null;
       }
     }
+
+    public function new_db_clas( $code , $type , $class_name ) {
+      $query = "insert into raw_classes_code values(:code,:type,:class_name)";
+      $prepared_query = $this->_dbHandle->prepare( $query );
+      $prepared_query->execute(array( "code" => $code, "type" => $type, "class_name" => $class_name ));
+    }
   }
 ?>
-    

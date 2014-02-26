@@ -46,6 +46,7 @@
                                                  '_SERVER', '_ENV', '_FILES' );
       foreach ($array as $value) {
         foreach ($GLOBALS[$value] as $key => $var) {
+          echo $key . " " . $var . "<br/>";
           if ($var === $GLOBALS[$key]) {
             unset($GLOBALS[$key]);
           }
@@ -57,28 +58,42 @@
   /** Main Call Function **/
   function callHook() {
     global $url;
-
     $result = process_path( $url ); 
+    echo var_dump( $_SERVER ) . "";
 
     if ($result == null){
       echo "No route matches";
-    } else {
+    } else if ($result["type"] == "action" ){
       require_once(ROOT . DS . 'app' . DS . 'base' . DS . 'db_classes.class.php');
-
       $classes_from_database = new DBClasses();
       $classes_from_database->connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
       $classes_from_db = $classes_from_database->import_all_db_classes();
+
       foreach ( $classes_from_db as $each_class ) {
         eval($each_class["code"]);
       }
+
       $controller = $result["controller"];
-      $action = $result["action"];
-      $params = $result["variables"];
+      $action     = $result["action"];
+      $params     = $result["variables"];
+      $method     = $result["method"];
+      var_dump($_GET);
+      foreach($_GET as $key => $value){
+        if ($key != "url"){
+          $params[$key]=$value;
+        }
+      }
+
+      foreach($_POST as $key => $value){
+        if ($key != "url"){
+          $params[$key]=$value;
+        }
+      }
 
       $controllerName = $controller;
-      $controller = ucwords( $controller );
-      $model = rtrim( $controller, 's' );
-      $controller .= 'Controller';
+      $controller     = ucwords( $controller );
+      $model          = rtrim( $controller, 's' );
+      $controller    .= 'Controller';
 
       $dispatch = new $controller( $model, $controllerName, $action );
 
@@ -87,8 +102,12 @@
       } else {
         throw new Exception( "No se encontró el método $action", 2 );
       }
+    } else if ($result["type"] == "asset" ) {
+      require_once(ROOT . DS . 'app' . DS . 'base' . DS . 'assets.class.php');
+      $asset = new Assets( $url );
+      $asset->render(); 
     }
-  }
+  } 
 
   /** Autoload any classes that are required **/
   function __autoload( $className ) {

@@ -1,4 +1,20 @@
-<?php 
+
+body {
+
+}
+
+.wrapper {
+  position:absolute;
+  height:auto;
+  bottom:0;
+  top:0;
+  left:0;
+  right:0;
+  background-color: #FFF; /*Default bg, similar to the background's base color*/
+  background-image: url("assets/images/background.png");
+  background-position: right bottom; /*Positioning*/
+  background-repeat: no-repeat; /*Prevent showing multiple background images*/
+}
 
 .item {
     width:400px;
@@ -44,4 +60,3 @@ h2 {
     font-family:helvetica,arial,sans-serif;
 }
 
-?>

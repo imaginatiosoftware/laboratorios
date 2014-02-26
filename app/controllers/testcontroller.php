@@ -1,5 +1,7 @@
 <?php
   class TestController extends Controller{
+    function check_json(){}
+    
     function tests () {
       //$this->not_render();
       $this->_template->set( "tests", $this->model->selectAll() );

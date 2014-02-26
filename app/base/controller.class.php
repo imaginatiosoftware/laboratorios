@@ -85,11 +85,13 @@
     }
 
     function render_json ( $data ){
+      $this->not_render();
+      header('Content-Type: application/json');
       echo json_encode( $data );
     }
 
     /**
-     * Class destructor. Renders its view if set.
+     * Class destructor. Renders its view if();t.
      */
     function __destruct() {
       if( isset( $this->_template ) ) {
