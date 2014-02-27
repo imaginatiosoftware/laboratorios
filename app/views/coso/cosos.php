@@ -5,4 +5,5 @@
     </div>
   <?php }?>
   <h3><?php echo $cosovo; ?></h3>
+  <h6><?php echo $coso; ?></h6>
 </div>

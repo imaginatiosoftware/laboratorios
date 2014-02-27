@@ -59,7 +59,9 @@
   function callHook() {
     global $url;
     $result = process_path( $url ); 
-    echo var_dump( $_SERVER ) . "";
+    echo var_dump( $_GET ) . "<hr/>";
+    echo var_dump( $_POST);
+    //echo file_get_contents("php://input") . "<hr/>";
 
     if ($result == null){
       echo "No route matches";
@@ -77,7 +79,7 @@
       $action     = $result["action"];
       $params     = $result["variables"];
       $method     = $result["method"];
-      var_dump($_GET);
+
       foreach($_GET as $key => $value){
         if ($key != "url"){
           $params[$key]=$value;

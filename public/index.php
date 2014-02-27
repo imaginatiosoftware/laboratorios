@@ -1,6 +1,8 @@
 <?php
   //url array
   //$requestURI = explode('/', $_SERVER['REQUEST_URI']);
+  //echo var_dump( $_SERVER ) . "<br/>";
+  //echo var_dump( $_POST ) . "<br/>";
   $url = $_GET['url'];
   $errors = 0;
 
