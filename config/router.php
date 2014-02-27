@@ -59,9 +59,20 @@
   function callHook() {
     global $url;
     $result = process_path( $url ); 
-    echo var_dump( $_GET ) . "<hr/>";
-    echo var_dump( $_POST);
-    //echo file_get_contents("php://input") . "<hr/>";
+    //echo var_dump( $_GET ) . "<hr/>";
+    //echo var_dump( $_POST) . "<hr/>";
+
+    echo var_dump( $_SERVER ) . "<hr/>";
+    echo "{$result['method']}: <br/>";
+    if ( $result['method'] == "GET" ) {
+      echo file_get_contents("php://input") . "<hr/>";
+    } elseif ( $result['method'] == "POST" ) {
+      echo file_get_contents("php://input") . "<hr/>";
+    } elseif ( $result['method'] == "PUT" ) {
+      echo file_get_contents("php://input") . "<hr/>";
+    } elseif ( $result['method'] == "DELTE" ) {
+      echo file_get_contents("php://input") . "<hr/>";
+    }
 
     if ($result == null){
       echo "No route matches";

@@ -76,7 +76,11 @@
       $this->_template = null;
     }
 
-    
+    /**  
+     * Sets the view to be rendered.
+     * @param mixed  $view       The view to be rendered
+     * @param string $controller If set, the view's contoller
+     */
     function render_view ( $view, $controller = null ) {
       if ( !isset( $controller ) ) {
         $controller = $this->_controller;
@@ -84,6 +88,7 @@
       $this->_template = new Template( $controller, $view );
     }
 
+    /**  Renders a json file  */
     function render_json ( $data ){
       $this->not_render();
       header('Content-Type: application/json');
@@ -91,7 +96,7 @@
     }
 
     /**
-     * Class destructor. Renders its view if();t.
+     * Class destructor. Renders its view, if there is one.
      */
     function __destruct() {
       if( isset( $this->_template ) ) {

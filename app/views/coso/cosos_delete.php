@@ -8,7 +8,7 @@
   <h1>Acá hay post</h1>
 
   <?php 
-    foreach ( $_POST as $key => $value ) {
+    foreach ( $_DELTE as $key => $value ) {
   ?>
       <p><?php echo "$key => $value"; ?></p>
   <?php } ?>

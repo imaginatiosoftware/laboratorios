@@ -7,8 +7,11 @@ route: test/check_json,                controller: test, action: check_json
 
 
 route: coso/list,                      controller: coso, action: cosos, method: get
+route: coso/list,                      controller: coso, action: cosos_post, method: post
+route: coso/list,                      controller: coso, action: cosos_put, method: put
+route: coso/list,                      controller: coso, action: cosos_delete, method: delete
+
 route: coso/redirect,                  controller: coso, action: redirect
 route: ,                               controller: sync, action: get_all_db_classes
 route: get_classes.json,               controller: sync, action: get_all_db_classes
 route: sync/new_db_class,              controller: sync, action: new_db_class, method: post
-route: coso/list,                      controller: coso, action: cosos_post, method: post

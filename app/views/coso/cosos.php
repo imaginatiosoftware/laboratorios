@@ -5,5 +5,9 @@
     </div>
   <?php }?>
   <h3><?php echo $cosovo; ?></h3>
-  <h6><?php echo $coso; ?></h6>
+
+  <form method="delete" action="/laboratorios/coso/list">
+    <input type="text" id="idparam" name="nameparam"/>
+    <input type="submit" value="Enviar"/>
+  </form>
 </div>
