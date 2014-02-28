@@ -5,10 +5,10 @@
     </div>
   <?php }?>
 
-  <h1>Acá hay post</h1>
+  <h1>Acá hay DELETE</h1>
 
   <?php 
-    foreach ( $_DELTE as $key => $value ) {
+    foreach ( $GLOBALS["_DELETE"] as $key => $value ) {
   ?>
       <p><?php echo "$key => $value"; ?></p>
   <?php } ?>

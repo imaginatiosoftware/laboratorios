@@ -1,0 +1,21 @@
+{
+  "table": "cosos",
+  "attributes": {
+    "id": {
+      "type": "int",
+      "primary_key": true
+    },
+    "nombre_coso": {
+      "type": "varchar"
+    },
+    "descripcion_coso": {
+      "type": "varchar"
+    },
+    "has_many": {
+      "ruedas": {
+        "clase": "rueda",
+        "tabla": "cosos_ruedas"
+      }
+    }
+  }
+}

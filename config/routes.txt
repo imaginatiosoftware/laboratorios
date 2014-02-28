@@ -1,5 +1,5 @@
 route: test/sumar/:sumandoA/:sumandoB, controller: test, action: sumar
-route: cosovo/show/:id,                controller: test, action: show
+route: test/show/:id,                controller: test, action: show
 route: test/list,                      controller: test, action: tests
 route: test/new,                       controller: test, action: create
 route: test/save,                      controller: test, action: save
@@ -8,7 +8,7 @@ route: test/check_json,                controller: test, action: check_json
 
 route: coso/list,                      controller: coso, action: cosos, method: get
 route: coso/list,                      controller: coso, action: cosos_post, method: post
-route: coso/list,                      controller: coso, action: cosos_put, method: put
+route: coso/list,                      controller: coso, action: cosos_put, method: patch
 route: coso/list,                      controller: coso, action: cosos_delete, method: delete
 
 route: coso/redirect,                  controller: coso, action: redirect

@@ -79,7 +79,8 @@
     /**  
      * Sets the view to be rendered.
      * @param mixed  $view       The view to be rendered
-     * @param string $controller If set, the view's contoller
+     * @param string $controller If set, the view's contoller. Defaults to the
+     *                           current controller
      */
     function render_view ( $view, $controller = null ) {
       if ( !isset( $controller ) ) {
@@ -88,7 +89,10 @@
       $this->_template = new Template( $controller, $view );
     }
 
-    /**  Renders a json file  */
+    /**  
+     * Renders a json file
+     * @param mixed $data The data to be served as json.
+     */
     function render_json ( $data ){
       $this->not_render();
       header('Content-Type: application/json');

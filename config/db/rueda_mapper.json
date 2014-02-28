@@ -1,0 +1,18 @@
+{
+  "table": "ruedas",
+  "attributes": {
+    "id": {
+      "type": "int",
+      "primary_key": true
+    },
+    "marca": {
+      "type": "varchar"
+    },
+    "descripcion": {
+      "type": "varchar"
+    },
+    "belongs_to": {
+      "coso": "coso"
+    }
+  }
+}

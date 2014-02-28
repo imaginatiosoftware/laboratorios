@@ -58,20 +58,23 @@
   /** Main Call Function **/
   function callHook() {
     global $url;
-    $result = process_path( $url ); 
-    //echo var_dump( $_GET ) . "<hr/>";
-    //echo var_dump( $_POST) . "<hr/>";
+    global $_PATCH;
+    global $_DELETE;
 
-    echo var_dump( $_SERVER ) . "<hr/>";
-    echo "{$result['method']}: <br/>";
-    if ( $result['method'] == "GET" ) {
-      echo file_get_contents("php://input") . "<hr/>";
-    } elseif ( $result['method'] == "POST" ) {
-      echo file_get_contents("php://input") . "<hr/>";
-    } elseif ( $result['method'] == "PUT" ) {
-      echo file_get_contents("php://input") . "<hr/>";
+    if ( isset( $_POST['REQUEST_METHOD'] ) ) {
+      $_SERVER["REQUEST_METHOD"] = strtoupper( $_POST["REQUEST_METHOD"] );
+      echo $_SERVER["REQUEST_METHOD"];
+    }
+
+    $result = process_path( $url ); 
+
+    $_PATCH    = array();
+    $_DELETE = array();
+
+    if ( $result['method'] == "PATCH" ) {
+      parse_str( file_get_contents("php://input"), $_PATCH );
     } elseif ( $result['method'] == "DELTE" ) {
-      echo file_get_contents("php://input") . "<hr/>";
+      parse_str( file_get_contents("php://input"), $_DELTE );
     }
 
     if ($result == null){

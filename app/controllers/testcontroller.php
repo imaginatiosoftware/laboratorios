@@ -8,7 +8,8 @@
     }
 
     function show ( $params ) {
-      $this->_template->set( "test", $this->model->select_where( "id" , $params["id"] ) );
+      //$this->_template->set( "test", $this->model->select_where( "id" , $params["id"] ) );
+      $this->_template->set( "test", $this->model->select( "id" , $params["id"] ) );
     }
 
     function create () {

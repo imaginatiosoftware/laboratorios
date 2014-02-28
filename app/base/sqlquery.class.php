@@ -5,22 +5,55 @@
     protected $_table;
     protected $_model;
 
-    /** Connects to database **/
+    /** 
+     * Connects to database
+     * @param string $address The address of the database
+     * @param string $account The account to access the database
+     * @param string $pwd     The account's password to access the database
+     * @param string $name    The databas's name
+     */
     function connect( $address, $account, $pwd, $name ) {
-      //abro conexión con la base de datos por medio de PDO
-      //manejar error mediante excepciones
+      /** 
+       * Abro conexión con la base de datos por medio de PDO
+       * @todo manejar error mediante excepciones?
+       */
       $this->_dbHandle = new PDO( "mysql:host=$address;dbname=$name",
                                   $account, $pwd);
     }
 
     /** Disconnects from database **/
-    //PDO es atajado por garbage collector
     function disconnect() {
-      /*if ( @mysql_close( $this->_dbHandle ) != 0 ) {
-        return 1;
-      } else {
-        return 0;
-      }*/
+      $this->_dbHandle = null;
+    }
+
+    public function save( ) {
+      $values = "";
+      $key_values = "";
+
+      foreach($this->_attributes as $key => $value){
+        if($key_values == ""){
+          $key_values = $key ." = ". $value ;
+        }else{
+          $key_values = $key_values .", ". $key ." = ". $value;
+        }
+        if($values == ""){
+          $values = ":". $key ;
+        }else{
+          $values = $values .", :". $key;
+        }
+      }
+
+      if( isset( $this->_attributes["id"] ) ) {
+        $query = "update tabla set $key_values where id = :id";
+        $prepared_query = $this->_dbHandle->prepare( $query );
+        $prepared_query->execute( array( "id" => $this->_attributes["id"] ) );
+      }else{
+        $query = "insert into $_table values($values)";
+        $prepared_query = $this->_dbHandle->prepare( $query );
+        $prepared_query->execute($this->_attributes);
+        $this->_attributes["id"] = $this->_dbHandle->lastInsertId('id');
+      }
+
     }
 
     function selectAll() {
@@ -34,8 +67,23 @@
       return $result_model; 
     }
 
+    /**
+     * Fetches an object stores in the database
+     * @param int    $id  The id to look for
+     * @return mixed Returns an instance of the current model if successful or
+     *               null if it isn't found in the database
+     */
     function select( $id ) {
-      $query = "select * from $this->_table where id = :id";
+      $model_map = json_decode(
+        file_get_contents(
+          ROOT . DS . "config" . DS . "db" . DS . strtolower( $this->_model ) . "_mapper.json"
+        ),
+        true
+      );
+
+      echo var_dump( $model_map );
+
+      $query = "select * from {$model_map['table']} where id = :id";
       $prepared_query = $this->_dbHandle->prepare( $query );
       $prepared_query->execute(array( "id" => $id ));
 
@@ -43,8 +91,25 @@
       $result_model = new $this->_model;
 
       if(is_array($result)){
-        foreach ( $result as $attribute_key => $attribute_value ) {
-          $result_model->$attribute_key = $attribute_value;
+        //foreach ( $result as $attribute_key => $attribute_value ) {
+        foreach ( $model_map['attributes'] as $attribute_key => $attribute_value ) {
+          if ( array_key_exists( $attribute_key, $model_map['attributes'] ) ) {
+            //acá para cuando son atributos comunes, simplemente se cargan como si nada
+            $result_model->_attributes[$attribute_key] = $attribute_value;
+          }
+
+          if ( isset( $model_map['attributes']['has_one'][$attribute_key . '_id'] ) ) {
+            //acá para cuando es relación uno a uno
+          }
+
+          if ( isset( $model_map['attributes']['has_many'][$attribute_key] ) ) {
+            //acá para cuando es de muchos a uno o a muchos
+            
+          }
+
+          if ( isset( $model_map['attributes']['belongs_to'][$attribute_key . '_id'] ) ) {
+            //acá cuando es de muchos a uno o a muchos
+          }
         }
       }
 
@@ -129,6 +194,10 @@
     /** Get error string **/
     function getError() {
       return mysql_error( $this->_dbHandle );
+    }
+
+    function __destruct() {
+      disconnect();
     }
   }
 ?>

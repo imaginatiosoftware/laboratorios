@@ -48,21 +48,6 @@
             $result["controller"] = $path[1];
             $result["action"] = $path[2];
             $result["variables"] = $variables;
-
-            /*if ( $result['method'] == "GET" ) {
-              echo var_dump($_GET) . "<hr/>";
-            } elseif ( $result['method'] == "POST" ) {
-              echo var_dump($_POST) . "<hr/>";
-            } elseif ( $result['method'] == "PUT" ) {
-              //echo var_dump($_PUT) . "<hr/>";
-            } elseif ( $result['method'] == "DELETE" ) {
-              echo implode(", ", $_DELETE) . "<hr/>";
-            }*/
-
-            //foreach ( $variables as $key => $value ) {
-            //  echo $key. " = " .$value;
-            //  echo "</br>";
-            //}
           }
         }
       }
