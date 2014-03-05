@@ -91,24 +91,34 @@
       $result_model = new $this->_model;
 
       if(is_array($result)){
-        //foreach ( $result as $attribute_key => $attribute_value ) {
         foreach ( $model_map['attributes'] as $attribute_key => $attribute_value ) {
-          if ( array_key_exists( $attribute_key, $model_map['attributes'] ) ) {
+          if ( array_key_exists( $attribute_key, $result ) ) {
             //acá para cuando son atributos comunes, simplemente se cargan como si nada
-            $result_model->_attributes[$attribute_key] = $attribute_value;
+            $result_model->_attributes[$attribute_key] = $result[$attribute_key];
           }
 
-          if ( isset( $model_map['attributes']['has_one'][$attribute_key . '_id'] ) ) {
+          if ( $attribute_key == "has_one" ) {
             //acá para cuando es relación uno a uno
+            foreach ( $model_map['attributes']['has_one'] as $has_one_key => $has_one_value ) {
+              echo "$has_one_key<br/>";
+              //cargar un proxy
+            }
           }
 
-          if ( isset( $model_map['attributes']['has_many'][$attribute_key] ) ) {
+          if ( $attribute_key == "has_many" ) {
             //acá para cuando es de muchos a uno o a muchos
-            
+            foreach ( $model_map['attributes']['has_many'] as $has_many_key => $has_many_value ) {
+              echo "$has_many_key<br/>";
+              //cargar los proxies correspondientes
+            }
           }
 
-          if ( isset( $model_map['attributes']['belongs_to'][$attribute_key . '_id'] ) ) {
+          if ( $attribute_key == "belongs_to" ) {
             //acá cuando es de muchos a uno o a muchos
+            foreach ( $model_map['attributes']['belongs_to'] as $owner_key => $owner_value ) {
+              echo "$owner_key<br/>";
+              //cargar un proxy
+            }
           }
         }
       }
