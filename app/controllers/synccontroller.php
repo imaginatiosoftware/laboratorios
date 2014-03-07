@@ -1,5 +1,5 @@
 <?php
-  class SyncController extends Controller{
+  class SyncController extends Controller {
     function get_all_db_classes(){
       /** Para no renderizar una vista */
       $this->not_render();

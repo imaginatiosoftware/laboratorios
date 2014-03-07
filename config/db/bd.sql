@@ -5,7 +5,7 @@ CREATE TABLE cosos (
   PRIMARY KEY      ( id )
 );
 
-CREATE TABLE materiales (
+CREATE TABLE materials (
   id          INT             NOT NULL AUTO_INCREMENT,
   descripcion VARCHAR ( 255 ) NOT NULL,
   PRIMARY KEY ( id )
@@ -14,9 +14,9 @@ CREATE TABLE materiales (
 CREATE TABLE ruedas (
   id          INT             NOT NULL AUTO_INCREMENT,
   material_id INT             NOT NULL,
-  cosos_id    INT             NOT NULL,
+  coso_id    INT             NOT NULL,
   descripcion VARCHAR ( 255 ) NOT NULL,
-  FOREIGN KEY ( material_id ) REFERENCES materiales( id ),
-  FOREIGN KEY ( cosos_id    ) REFERENCES cosos     ( id ),
+  FOREIGN KEY ( material_id ) REFERENCES materials( id ),
+  FOREIGN KEY ( coso_id    ) REFERENCES cosos     ( id ),
   PRIMARY KEY ( id )
 );

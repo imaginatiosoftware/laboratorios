@@ -13,8 +13,7 @@
     },
     "has_many": {
       "ruedas": {
-        "clase": "rueda",
-        "tabla": "cosos_ruedas"
+        "clase": "rueda"
       }
     }
   }
