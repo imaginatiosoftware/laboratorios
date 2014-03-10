@@ -7,7 +7,9 @@
     }
 
     function show ( $params ) {
-      $this->_template->set( "test", $this->model->select( "id" , $params["id"] ) );
+      echo "SHOW!!!";
+      echo "id: {$params["id"]}<br/>";
+      $this->_template->set( "test", Test::select( $params["id"] ) );
     }
 
     function create () {

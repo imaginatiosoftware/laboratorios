@@ -17,7 +17,7 @@
         <tr>
           <td><?php echo $test->id; ?></td>
           <td><?php echo $test->test_name; ?></td>
-          <td><a href="/laboratorios/cosovo/show/<?php echo $test->id; ?>">show</a></td>
+          <td><a href="/laboratorios/test/show/<?php echo $test->id; ?>">show</a></td>
         </tr>
       <?php } ?>
     </tbody>

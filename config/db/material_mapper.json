@@ -1,21 +1,15 @@
 {
-  "table": "ruedas",
+  "table": "materials",
   "attributes": {
     "id": {
       "type": "int",
       "primary_key": true
     },
-    "marca": {
-      "type": "varchar"
-    },
     "descripcion": {
       "type": "varchar"
     },
     "belongs_to": {
-      "coso": "coso"
-    },
-    "has_one": {
-      "material": "material"
+      "rueda": "rueda"
     }
   }
 }

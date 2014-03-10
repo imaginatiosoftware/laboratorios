@@ -149,4 +149,3 @@
   unregisterGlobals();
   callHook();
 ?>
-

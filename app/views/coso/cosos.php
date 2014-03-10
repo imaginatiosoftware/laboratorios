@@ -6,8 +6,13 @@
   <?php }?>
   <h3><?php echo $cosovo; ?></h3>
 
-  <h4><?php echo $coso->_attributes['nombre_coso']; ?></h4>
-  <h5><?php echo $coso->_attributes['ruedas'][0]->get_id(); ?></h5>
+  <h4><?php echo $coso->nombre_coso; ?></h4>
+  <?php
+    foreach ( $coso->ruedas as $rueda ) {
+  ?>
+    <h5><?php echo "{$rueda->id} - {$rueda->descripcion}" ?></h5>
+    <h6>=-&gt; <?php echo $rueda->material->descripcion;?></h6>
+  <?php } ?>
 
   <form method="post" action="/laboratorios/coso/list">
     <input type="hidden" name="REQUEST_METHOD" value="patch"/>

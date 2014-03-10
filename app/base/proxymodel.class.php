@@ -38,5 +38,16 @@
         return call_user_func( array( $this->_real_model_instance, $method ), $args );
       }
     }
+
+    function __get( $name ) {
+      if ( !isset( $this->_real_model_instance ) ) {
+        $this->_real_model_instance = call_user_func(
+          array( $this->_real_model_name, "select"),
+          $this->_real_model_id
+        );
+      }
+
+      return $this->_real_model_instance->$name;
+    }
   }
 ?>

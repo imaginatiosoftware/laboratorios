@@ -1,0 +1,12 @@
+{
+  "table": "tests",
+  "attributes": {
+    "id": {
+      "type": "int",
+      "primary_key": true
+    },
+    "test_name": {
+      "type": "varchar"
+    }
+  }
+}

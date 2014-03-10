@@ -11,6 +11,14 @@
       $this->_attributes = new ArrayObject( array(), ArrayObject::STD_PROP_LIST );
     }
 
+    function __get( $name ) {
+      return $this->_attributes[$name];
+    }
+
+    function __set( $name, $value ) {
+      $this->_attributes[$name] = $value;
+    }
+
     function __destruct() {
     }
   }

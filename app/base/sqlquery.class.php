@@ -51,11 +51,13 @@
     public static function selectAll() {
       static::connect();
 
-      $query = "select * from $this->_table";
-      $prepared_query = $this->_dbHandle->prepare( $query );
+      $query = "select * from " . static::$_table;
+      $prepared_query = static::$_dbHandle->prepare( $query );
       $prepared_query->execute();
 
-      $result_model = $prepared_query->fetchAll(PDO::FETCH_CLASS, $this->_model);
+      $result_model = $prepared_query->fetchAll(
+        PDO::FETCH_CLASS, static::$_model
+      );
 
       $prepared_query->closeCursor();
 
@@ -96,9 +98,10 @@
             //acá para cuando es relación uno a uno
             foreach ( $model_map['attributes']['has_one'] as $has_one_key => $has_one_value ) {
               //cargar un proxy
-              $class_name = ucwords($has_one_value['clase']);
-              $proxy = new ProxyModel( $class_name, $class_id );
-              //$result_model->_attributes[$has_one_key] = $proxy_model;
+              $class_name = ucwords($has_one_value);
+
+              $proxy = new ProxyModel( $class_name, $result[$has_one_value . '_id'] );
+              $result_model->_attributes[$has_one_key] = $proxy;
             }
           }
 
@@ -130,7 +133,7 @@
           }
 
           if ( $attribute_key == "belongs_to" ) {
-            //acá cuando es de muchos a uno o a muchos
+            //acá cuando es de muchos a uno
             foreach ( $model_map['attributes']['belongs_to'] as $owner_key => $owner_value ) {
               //cargar un proxy
               $clase = ucwords($owner_value);
@@ -155,16 +158,17 @@
      */
     public static function select_where( $key , $val ) {
       static::connect();
-      $query = "select * from self::$_table where $key = :val";
-      $prepared_query = $this->_dbHandle->prepare( $query );
-      $prepared_query->execute(array( "val" => $val ));
-      
+      $query = "select * from " . static::$_table . " where :key = :val";
+      $prepared_query = static::$_dbHandle->prepare( $query );
+      $prepared_query->execute(array( "key" => $key , "val" => $val ));
+
       $result = $prepared_query->fetch( PDO::FETCH_ASSOC );
-      $result_model = new $this->_model;
+      $result_model = new static::$_model;
 
       if( is_array( $result ) ){
         foreach ( $result as $attribute_key => $attribute_value ) {
-          $result_model->$attribute_key = $attribute_value;
+          echo $attribute_key . ": " . $attribute_value . "<br/>";
+          $result_model->_attributes[$attribute_key] = $attribute_value;
         }
       }
 
