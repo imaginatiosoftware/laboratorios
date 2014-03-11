@@ -1,9 +1,7 @@
 <?php 
   class CosoController extends Controller {
     function cosos ( $params ) {
-      $this->set( "flash", array( "notice" => "Coso!" ) );
-      $this->set( "cosovo", "Acá hay un Cosovo" );
-      $this->set( "coso", $this->model->select(1) );
+      $this->set( "cosos", Coso::selectAll() );
     }
 
     function cosos_post ( $params ) {
@@ -15,6 +13,10 @@
     }
 
     function cosos_delete ( $params ) {
+    }
+
+    function show ( $params ) {
+      $this->set( "coso", Coso::select( $params['id'] ) );
     }
   }
 ?>

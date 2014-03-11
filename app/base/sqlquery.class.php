@@ -45,24 +45,153 @@
     /**
      * Fetches all of the model's instances stored in the database
      * @return array Returns an array with the instances fetched.
-     * @todo         cambiar la funcion para que devuelva modelos según el mapper,
-     *               para referencias, ver la función select
+     * @todo DRY!!!!
      */
     public static function selectAll() {
       static::connect();
 
-      $query = "select * from " . static::$_table;
+      $model_map = json_decode(
+        file_get_contents(
+          ROOT . DS . "config" . DS . "db" . DS . strtolower( static::$_model )
+               . "_mapper.json"
+        ),
+        true
+      );
+
+      $query = "SELECT * FROM {$model_map['table']}";
       $prepared_query = static::$_dbHandle->prepare( $query );
       $prepared_query->execute();
 
-      $result_model = $prepared_query->fetchAll(
-        PDO::FETCH_CLASS, static::$_model
-      );
+      $result_models = array();
+      $results = $prepared_query->fetchAll( PDO::FETCH_ASSOC );
+
+      foreach ( $results as $result ) {
+        $result_model = new static::$_model;
+
+        foreach (
+          $model_map['attributes'] as $attribute_key => $attribute_value
+        ) {
+          if ( array_key_exists( $attribute_key, $result ) ) {
+            $result_model->_attributes[$attribute_key] = $result[$attribute_key];
+          }
+
+          /**
+           * One-on-one relationship. One object belongs to another. The
+           * containing object has a reference to the object conatined.
+           */
+          if ( $attribute_key == "has_one" ) {
+            foreach ( $model_map['attributes']['has_one'] as $has_one_key => $has_one_value ) {
+              $class_name = ucwords($has_one_value);
+
+              $proxy = new ProxyModel( $class_name, $result[$has_one_value . '_id'] );
+              $result_model->_attributes[$has_one_key] = $proxy;
+            }
+          }
+
+          /**
+           * Many-to-one, one-to-many, many-to-one relationships. Objects are
+           * referenced throught an intermediate table in the database.
+           */
+          if ( $attribute_key == "has_many" ) {
+            foreach ( $model_map['attributes']['has_many'] as $has_many_key => $has_many_value ) {
+              $class_name = ucwords($has_many_value['clase']);
+              $proxy_collection = array();
+
+              if ( isset( $has_many_value['table'] ) ) {
+                $query = "select rueda_id from cosos_ruedas where coso_id = :id";
+              } else {
+                $query = "select id from ruedas where coso_id = :id";
+              }
+
+              $prepared_query = static::$_dbHandle->prepare( $query );
+              $prepared_query->execute(array( "id" => $result['id'] ));
+
+              $result_ids = $prepared_query->fetchAll( PDO::FETCH_ASSOC );
+
+              foreach ( $result_ids as $result_id ) {
+                array_push($proxy_collection, new ProxyModel( $class_name, $result_id['id'] ));
+              }
+
+              $result_model->_attributes[$has_many_key] = $proxy_collection;
+            }
+          }
+
+          /**
+           * One-on-one, many-to-one relationships. This indicates an object
+           * belongs to another. May or may not have a reference of the
+           * containing object on the database.
+           */
+          if ( $attribute_key == "belongs_to" ) {
+            foreach ( $model_map['attributes']['belongs_to'] as $owner_key => $owner_value ) {
+              $class_name = ucwords($owner_value);
+
+              /**
+               * Check if the owner is referenced on this object.
+               */
+              if ( isset( $result[ $owner_value . '_id' ] ) ) {
+                $owner_id = $result[ $owner_value . '_id' ];
+              }
+
+              /**
+               * If not found yet, check the database to retrieve the owner
+               * reference throught this object's id
+               */
+              if ( !isset( $owner_id ) ) {
+                $owner_map = json_decode(
+                  file_get_contents(
+                    ROOT . DS . "config" . DS . "db" . DS . $owner_value
+                         . "_mapper.json"
+                  ),
+                  true
+                );
+
+                if ( isset($owner_map['has_one']) 
+                     && isset($owner_map['has_one'][static::$_model])
+                ) {
+                  $query = "SELECT id FROM {$owner_map['table']} "
+                           . "WHERE {static::$_model}_id = :model_id";
+                  $prepared_statement = static::$_dbHandle->prepare( $query );
+                  $prepared_statement->execute(
+                    array( "model_id" => $result['id'] )
+                  );
+
+                  $owner_result = $prepared_statement->fetch(
+                      PDO::FETCH_ASSOC
+                  );
+                  $owner_id = $owner_result['id'];
+                }
+              }
+
+              /**
+               * Last case, it's a many-to-one relationship. Look for the owner
+               * object on the intermediate table.
+               */
+              if ( !isset( $owner_id ) ) {
+                $tabla_intermedia = array( static::$_table, $owner_map['tabla'] );
+                echo join( "_", $tabla_intermedia ) . "<br/>";
+
+                $query = "SELECT {$owner_value}_id FROM {tabla_intermedia}"
+                         . "WHERE {}_id = :model_id";
+                $prepared_statement = static::$_dbHandle->prepare( $query );
+                $prepared_statement->execute( array( "model_id" => $result['id'] ) );
+
+                $owner_result = $prepared_statement->fetch( PDO::FETCH_ASSOC );
+                $owner_id = $owner_result[$owner_value . '_id'];
+              }
+
+              $proxy = new ProxyModel( $class_name, $owner_id );
+              $result_model->_attributes[$owner_key] = $proxy;
+            }
+          }
+        }
+
+        array_push( $result_models, $result_model );
+      }
 
       $prepared_query->closeCursor();
-
       static::disconnect();
-      return $result_model; 
+
+      return $result_models; 
     }
 
     /**
@@ -70,12 +199,18 @@
      * @param  int   $id The id to look for
      * @return mixed     Returns an instance of the current model if 
      *                   successful or null if it isn't found in the database
+     * @todo             Ver como hacer para las tablas intermedias. ¿Se podría
+     *                   hacer que la tabla intermedia sea en orden alfabético?
+     *                   Ej.: tabla_a_tabla_b, tabla_a y tabla_b tienen una
+     *                   relación.
      */
     public static function select( $id ) {
       static::connect();
+
       $model_map = json_decode(
         file_get_contents(
-          ROOT . DS . "config" . DS . "db" . DS . strtolower( static::$_model ) . "_mapper.json"
+          ROOT . DS . "config" . DS . "db" . DS
+               . strtolower( static::$_model ) . "_mapper.json"
         ),
         true
       );
@@ -90,14 +225,15 @@
       if(is_array($result)){
         foreach ( $model_map['attributes'] as $attribute_key => $attribute_value ) {
           if ( array_key_exists( $attribute_key, $result ) ) {
-            //acá para cuando son atributos comunes, simplemente se cargan como si nada
             $result_model->_attributes[$attribute_key] = $result[$attribute_key];
           }
 
+          /**
+           * One-on-one relationship. One object belongs to another. The
+           * containing object has a reference to the object conatined.
+           */
           if ( $attribute_key == "has_one" ) {
-            //acá para cuando es relación uno a uno
             foreach ( $model_map['attributes']['has_one'] as $has_one_key => $has_one_value ) {
-              //cargar un proxy
               $class_name = ucwords($has_one_value);
 
               $proxy = new ProxyModel( $class_name, $result[$has_one_value . '_id'] );
@@ -105,12 +241,13 @@
             }
           }
 
+          /**
+           * Many-to-one, one-to-many, many-to-one relationships. Objects are
+           * referenced throught an intermediate table in the database.
+           */
           if ( $attribute_key == "has_many" ) {
-            //acá para cuando es de muchos a uno o a muchos
             foreach ( $model_map['attributes']['has_many'] as $has_many_key => $has_many_value ) {
-              //cargar los proxies correspondientes
               $class_name = ucwords($has_many_value['clase']);
-              $proxy_model_name = "{$class_name}Proxy";
               $proxy_collection = array();
 
               if ( isset( $has_many_value['tabla'] ) ) {
@@ -132,13 +269,71 @@
             }
           }
 
+          /**
+           * One-on-one, many-to-one relationships. This indicates an object
+           * belongs to another. May or may not have a reference of the
+           * containing object on the database.
+           */
           if ( $attribute_key == "belongs_to" ) {
-            //acá cuando es de muchos a uno
             foreach ( $model_map['attributes']['belongs_to'] as $owner_key => $owner_value ) {
-              //cargar un proxy
-              $clase = ucwords($owner_value);
-              $proxy_model_name = "{$clase}Proxy";
-              //$result_model->_attributes[$owner_key] = $prxy_model_name;
+              $class_name = ucwords($owner_value);
+
+              /**
+               * Check if the owner is referenced on this object.
+               */
+              if ( isset( $result[ $owner_value . '_id' ] ) ) {
+                $owner_id = $result[ $owner_value . '_id' ];
+              }
+
+              /**
+               * If not found yet, check the database to retrieve the owner
+               * reference throught this object's id
+               */
+              if ( !isset( $owner_id ) ) {
+                $owner_map = json_decode(
+                  file_get_contents(
+                    ROOT . DS . "config" . DS . "db" . DS . $owner_value
+                         . "_mapper.json"
+                  ),
+                  true
+                );
+
+                if ( isset($owner_map['has_one']) 
+                     && isset($owner_map['has_one'][static::$_model])
+                ) {
+                  $query = "SELECT id FROM {$owner_map['table']} "
+                           . "WHERE {static::$_model}_id = :model_id";
+                  $prepared_statement = static::$_dbHandle->prepare( $query );
+                  $prepared_statement->execute(
+                    array( "model_id" => $result['id'] )
+                  );
+
+                  $owner_result = $prepared_statement->fetch(
+                      PDO::FETCH_ASSOC
+                  );
+                  $owner_id = $owner_result['id'];
+                }
+              }
+
+              /**
+               * Last case, it's a many-to-one relationship. Look for the owner
+               * object on the intermediate table.
+               */
+              if ( !isset( $owner_id ) ) {
+                $tabla_intermedia = array( static::$_table, $owner_map['tabla'] );
+                echo join( "_", $tabla_intermedia ) . "<br/>";
+
+                $query = "SELECT {$owner_value}_id FROM {tabla_intermedia}"
+                         . "WHERE {}_id = :model_id";
+                $prepared_statement = static::$_dbHandle->prepare( $query );
+                $prepared_statement->execute( array( "model_id" => $result['id'] ) );
+
+                $owner_result = $prepared_statement->fetch( PDO::FETCH_ASSOC );
+                $owner_id = $owner_result[$owner_value . '_id'];
+              }
+
+              $proxy = new ProxyModel( $class_name, $owner_id );
+              $result_model->_attributes[$owner_key] = $proxy;
             }
           }
         }
@@ -155,6 +350,7 @@
      * @param  mixed   $val The value the attribute must have
      * @return mixed        The first instance that matches. Returns null if
      *                      it doesn't match
+     * @todo                Devolver un modelo como en select()
      */
     public static function select_where( $key , $val ) {
       static::connect();
@@ -182,6 +378,7 @@
      * @param  string $key The matching attribute's name
      * @param  string $val The value the attribute must have
      * @return array       A collection of the retrieved instances
+     * @todo               Devolver una colección de modelos como en selectAll()
      */
     public static function select_where_all( $key , $val ) {
       static::connect();

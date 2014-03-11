@@ -7,8 +7,6 @@
     }
 
     function show ( $params ) {
-      echo "SHOW!!!";
-      echo "id: {$params["id"]}<br/>";
       $this->_template->set( "test", Test::select( $params["id"] ) );
     }
 

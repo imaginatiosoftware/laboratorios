@@ -10,8 +10,8 @@ route: coso/list,                      controller: coso, action: cosos, method: 
 route: coso/list,                      controller: coso, action: cosos_post, method: post
 route: coso/list,                      controller: coso, action: cosos_put, method: patch
 route: coso/list,                      controller: coso, action: cosos_delete, method: delete
+route: coso/show/:id,                  controller: coso, action: show
 
 route: coso/redirect,                  controller: coso, action: redirect
-route: ,                               controller: sync, action: get_all_db_classes
 route: get_classes.json,               controller: sync, action: get_all_db_classes
 route: sync/new_db_class,              controller: sync, action: new_db_class, method: post
