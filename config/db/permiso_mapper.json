@@ -1,0 +1,18 @@
+{
+  "table": "permisos",
+  "attributes": {
+    "id": {
+      "type": "int",
+      "primary_key": true
+    },
+    "descripcion": {
+      "type": "varchar"
+    },
+    "habilitado": {
+      "type": "tinyint"
+    },
+    "has_many": {
+      "roles": "rol"
+    }
+  }
+}

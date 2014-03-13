@@ -1,0 +1,39 @@
+{
+  "table": "usuarios",
+  "attributes": {
+    "id": {
+      "type": "int",
+      "primary_key": true
+    },
+    "nombre": {
+      "type": "varchar"
+    },
+    "apellido": {
+      "type": "varchar"
+    },
+    "segundo_apellido": {
+      "type": "varchar"
+    },
+    "cedula": {
+      "type": "varchar"
+    },
+    "nro_caja_profesional": {
+      "type": "varchar"
+    },
+    "direccion": {
+      "type": "varchar"
+    },
+    "telefono": {
+      "type": "varchar"
+    },
+    "email": {
+      "type": "varchar"
+    },
+    "habilitado": {
+      "type": "tinyint"
+    },
+    "has_many": {
+      "roles": "rol"
+    }
+  }
+}
