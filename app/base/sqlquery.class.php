@@ -228,9 +228,10 @@
        $prepared_query->execute(array( "val" => $val ));
 
        $result       = $prepared_query->fetch( PDO::FETCH_ASSOC );
-       $result_model = new static::$_model;
+       $result_model = null;
 
        if(is_array($result)){
+        $result_model = new static::$_model;
         foreach ( $model_map['attributes'] as $attribute_key => $attribute_value ) {
           if ( array_key_exists( $attribute_key, $result ) ) {
             $result_model->_attributes[$attribute_key] = $result[$attribute_key];

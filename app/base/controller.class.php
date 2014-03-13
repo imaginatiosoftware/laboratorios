@@ -67,7 +67,7 @@
         /**  The template is changed  */
         $this->_template = new Template( $this->_controller, $action );
         /**  And finally, the action is called  */
-        $this->$action();
+        $this->$action( $params );
       }
     }
 
