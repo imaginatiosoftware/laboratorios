@@ -32,6 +32,9 @@
     "habilitado": {
       "type": "tinyint"
     },
+    "password": {
+      "type": "varchar"
+    },
     "has_many": {
       "roles": "rol"
     }

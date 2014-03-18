@@ -71,15 +71,15 @@
     $_PATCH    = array();
     $_DELETE = array();
 
-    if ( $result['method'] == "PATCH" ) {
-      parse_str( file_get_contents("php://input"), $_PATCH );
-    } elseif ( $result['method'] == "DELTE" ) {
-      parse_str( file_get_contents("php://input"), $_DELTE );
-    }
-
     if ($result == null){
       echo "No route matches";
     } else if ($result["type"] == "action" ){
+      if ( $result['method'] == "PATCH" ) {
+        parse_str( file_get_contents("php://input"), $_PATCH );
+      } else if ( $result['method'] == "DELTE" ) {
+        parse_str( file_get_contents("php://input"), $_DELTE );
+      }
+
       require_once(ROOT . DS . 'app' . DS . 'base' . DS . 'db_classes.class.php');
       $classes_from_database = new DBClasses();
       $classes_from_database->connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
@@ -123,7 +123,7 @@
       $asset = new Assets( $url );
       $asset->render(); 
     }
-  } 
+  }
 
   /** Autoload any classes that are required **/
   function __autoload( $className ) {

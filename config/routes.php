@@ -55,21 +55,21 @@
       //if it si an asset it will change the routing system.
       $result = array();
       $result["type"] = "asset";
-      
     }
 
     return $result;
   }
-  
+
   function isAsset( $url ) {
     $result = false;
     $splited_request = explode( "/", $url );
+
     if (count($splited_request)>1){ 
       if ( $splited_request[0] == "assets" || $splited_request[1] == "assets"){
         $result = true;
       }
     }
+
     return $result;
   }
-  
  ?>

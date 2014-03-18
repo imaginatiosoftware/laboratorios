@@ -1,4 +1,4 @@
---INSERT INTO permisos () VALUES ();
+-- INSERT INTO permisos () VALUES ();
 
 INSERT INTO permisos ( descripcion, habilitado )
   VALUES ( "/laboratorios/usuario/usuarios", 1 );
@@ -19,7 +19,8 @@ INSERT INTO usuarios (
     telefono,
     email,
     rol_id,
-    habilitado
+    habilitado,
+    password
   ) VALUES (
     "Test",
     "Test",
@@ -30,5 +31,6 @@ INSERT INTO usuarios (
     "47222222",
     "test@test.test",
     1,
-    1
+    1,
+    "coso"
   );

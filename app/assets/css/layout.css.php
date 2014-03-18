@@ -4,7 +4,7 @@ body {
 }
 
 .wrapper {
-  position:absolute;
+  /*position:absolute;*/
   height:auto;
   bottom:0;
   top:0;
@@ -60,3 +60,33 @@ h2 {
     font-family:helvetica,arial,sans-serif;
 }
 
+.flash {
+  width: 100%;
+}
+
+.error {
+  width: 100%;
+  background-color: darkred;
+  color: white;
+  border-radius: 1em;
+  text-align: center;
+  cursor: pointer;
+}
+
+.success {
+  width: 100%;
+  background-color: green;
+  color: white;
+  border-radius: 1em;
+  text-align: center;
+  cursor: pointer;
+}
+
+.notice {
+  width: 100%;
+  background-color: lightblue;
+  color: darkblue;
+  border-radius: 1em;
+  text-align: center;
+  cursor: pointer;
+}

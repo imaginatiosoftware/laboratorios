@@ -1,4 +1,4 @@
-DROP laboratorios_development IF EXISTS;
+DROP DATABASE IF EXISTS laboratorios_development;
 CREATE DATABASE laboratorios_development;
 
 USE laboratorios_development;
@@ -37,6 +37,7 @@ CREATE TABLE usuarios (
   email                VARCHAR ( 255 ) NOT NULL,
   rol_id               INT             NOT NULL,
   habilitado           TINYINT ( 1   ) NOT NULL,
+  password             VARCHAR ( 255 ) NOT NULL,
   FOREIGN KEY          ( rol_id )      REFERENCES roles( id ),
   PRIMARY KEY ( id )
 );

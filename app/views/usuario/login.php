@@ -1,9 +1,9 @@
 <div>
-  <form method="post">
+  <form action='/laboratorios/usuario/login' method="post">
     <fieldset>
       <p>
         <label for="username">Usuario:</label>
-        <input type="text" id="username" name="username"/>
+        <input type="text" id="username" name="username" placeholder=''/>
       </p>
 
       <p>

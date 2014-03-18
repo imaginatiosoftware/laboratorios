@@ -18,3 +18,5 @@ route: sync/new_db_class,              controller: sync, action: new_db_class, m
 
 route: usuario/login,                  controller: usuario, action: login, method: get
 route: usuario/login,                  controller: usuario, action: authenticate, method: post
+route: usuario/logoff,                 controller: usuario, action: logoff
+route: usuario/dashboard,              controller: usuario, action: dashboard
